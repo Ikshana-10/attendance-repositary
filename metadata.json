@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "Student Attendance Management System",
+  "description": "Comprehensive student attendance management system with role-based admin and student dashboards, reports, and real-time tracking.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

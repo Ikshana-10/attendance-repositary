@@ -1,0 +1,89 @@
+{
+  "entities": {
+    "users": {
+      "title": "User Profile",
+      "description": "System user account with role-based access",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string", "description": "User display name" },
+        "email": { "type": "string", "description": "User email address" },
+        "role": { "type": "string", "enum": ["admin", "student"], "description": "Role classification" },
+        "studentId": { "type": "string", "description": "Optional linked student ID for students" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of creation" }
+      },
+      "required": ["userId", "name", "email", "role"]
+    },
+    "departments": {
+      "title": "Department",
+      "description": "Academic engineering or arts department",
+      "type": "object",
+      "properties": {
+        "departmentId": { "type": "string", "description": "Unique department identifier" },
+        "name": { "type": "string", "description": "Full department name", "maxLength": 100 },
+        "code": { "type": "string", "description": "Short code e.g. CSE", "maxLength": 10 },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["departmentId", "name"]
+    },
+    "students": {
+      "title": "Student",
+      "description": "Enrolled student scholar dossier",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "description": "Unique student identifier" },
+        "registerNumber": { "type": "string", "description": "Official college register number" },
+        "name": { "type": "string", "description": "Full student name" },
+        "departmentId": { "type": "string", "description": "Associated department ID" },
+        "departmentName": { "type": "string", "description": "Associated department name" },
+        "year": { "type": "string", "description": "Academic Year (1st, 2nd, 3rd, 4th)" },
+        "section": { "type": "string", "description": "Class Section" },
+        "email": { "type": "string", "description": "Student email" },
+        "phone": { "type": "string", "description": "Student phone" },
+        "status": { "type": "string", "enum": ["Active", "Inactive"], "description": "Enrollment status" },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["studentId", "registerNumber", "name", "departmentId", "year", "section", "email"]
+    },
+    "attendance": {
+      "title": "Attendance Record",
+      "description": "Daily roll-call session record for a student",
+      "type": "object",
+      "properties": {
+        "attendanceId": { "type": "string", "description": "Composite key e.g. studentId_date" },
+        "studentId": { "type": "string", "description": "Referenced student ID" },
+        "studentName": { "type": "string", "description": "Student name at time of marking" },
+        "registerNumber": { "type": "string", "description": "Student register number" },
+        "departmentId": { "type": "string", "description": "Department ID" },
+        "departmentName": { "type": "string", "description": "Department Name" },
+        "year": { "type": "string", "description": "Academic Year" },
+        "section": { "type": "string", "description": "Section" },
+        "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "description": "Session date" },
+        "status": { "type": "string", "enum": ["Present", "Absent", "Late"], "description": "Status" },
+        "checkInTime": { "type": "string", "description": "Check in timestamp" },
+        "checkOutTime": { "type": "string", "description": "Check out timestamp" },
+        "markedBy": { "type": "string", "description": "Admin UID or email who marked session" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last modification" }
+      },
+      "required": ["attendanceId", "studentId", "date", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/users" },
+      "description": "User profiles and RBAC role assignments"
+    },
+    "/departments/{departmentId}": {
+      "schema": { "$ref": "#/entities/departments" },
+      "description": "Academic departments list"
+    },
+    "/students/{studentId}": {
+      "schema": { "$ref": "#/entities/students" },
+      "description": "Student academic rosters and profiles"
+    },
+    "/attendance/{attendanceId}": {
+      "schema": { "$ref": "#/entities/attendance" },
+      "description": "Daily attendance logs and records"
+    }
+  }
+}
